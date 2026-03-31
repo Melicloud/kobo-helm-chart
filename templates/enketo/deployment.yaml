@@ -9,6 +9,7 @@ spec:
   {{- if not .Values.enketo.autoscaling.enabled }}
   replicas: {{ .Values.enketo.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.enketo.revisionHistoryLimit | default 3 }}
   {{- if .Values.enketo.strategy }}
   strategy: {{- toYaml .Values.enketo.strategy | nindent 4 }}
   {{- end }}
@@ -19,7 +20,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/enketo/secrets.yaml") . | sha256sum }}
         checksum/configmap: {{ include (print $.Template.BasePath "/enketo/configmap.yaml") . | sha256sum }}
         tag: "{{ .Values.enketo.image.tag }}"
       labels:
@@ -68,8 +68,6 @@ spec:
               value: {{ (include "kobo.redis.url" .) }}
             {{- end }}
           envFrom:
-            - secretRef:
-                name: {{ include "kobo.fullname" . }}-enketo
             - configMapRef:
                 name: {{ include "kobo.fullname" . }}-enketo
           {{- with .Values.enketo.extraVolumeMounts }}

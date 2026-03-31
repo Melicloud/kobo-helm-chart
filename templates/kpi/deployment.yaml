@@ -9,6 +9,7 @@ spec:
   {{- if not .Values.kpi.autoscaling.enabled }}
   replicas: {{ .Values.kpi.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.kpi.revisionHistoryLimit | default 3 }}
   {{- if .Values.kpi.strategy }}
   strategy: {{- toYaml .Values.kpi.strategy | nindent 4 }}
   {{- end }}
@@ -19,7 +20,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/kpi/secrets.yaml") . | sha256sum }}
         checksum/configmap: {{ include (print $.Template.BasePath "/kpi/configmap.yaml") . | sha256sum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         tag: "{{ .Values.kpi.version }}"

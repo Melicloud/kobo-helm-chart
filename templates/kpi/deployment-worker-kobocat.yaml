@@ -9,6 +9,7 @@ spec:
   {{- if not .Values.kpi.worker.autoscaling.enabled }}
   replicas: {{ .Values.kpi.worker.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.kpi.revisionHistoryLimit | default 3 }}
   selector:
     matchLabels:
       app.kubernetes.io/component: kpi-worker-kobocat
@@ -16,7 +17,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/kpi/secrets.yaml") . | sha256sum }}
         checksum/configmap: {{ include (print $.Template.BasePath "/kpi/configmap.yaml") . | sha256sum }}
         tag: "{{ .Values.kpi.version }}"
       labels:

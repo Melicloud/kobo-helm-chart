@@ -36,13 +36,14 @@ kpi:
     repository: kobotoolbox/kpi
     pullPolicy: IfNotPresent
   replicaCount: 1
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1100Mi
-    requests:
-      cpu: 100m
-      memory: 900Mi
+  resources: {}
+  # resources:
+  #   limits:
+  #     cpu: 1000m
+  #     memory: 1100Mi
+  #   requests:
+  #     cpu: 100m
+  #     memory: 900Mi
   autoscaling:
     enabled: false
     minReplicas: 2
@@ -115,13 +116,14 @@ kpi:
           - "bash"
           - "-c"
           - "celery -A kobo inspect ping -d kpi_main_worker@$HOSTNAME | grep -q OK"
-    resources:
-      limits:
-        cpu: 2000m
-        memory: 1400Mi
-      requests:
-        cpu: 400m
-        memory: 700Mi
+    resources: {}
+    # resources:
+    #   limits:
+    #     cpu: 2000m
+    #     memory: 1400Mi
+    #   requests:
+    #     cpu: 400m
+    #     memory: 700Mi
     autoscaling:
       enabled: true
       minReplicas: 1
@@ -130,13 +132,14 @@ kpi:
       # targetMemory: 80
   workerLongRunning:
     celeryAutoscale: "2,10"
-    resources:
-      limits:
-        cpu: 2000m
-        memory: 2000Mi
-      requests:
-        cpu: 500m
-        memory: 500Mi
+    resources: {}
+    # resources:
+    #   limits:
+    #     cpu: 2000m
+    #     memory: 2000Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 500Mi
   workerLowPriority:
     replicaCount: 1
     livenessProbe:
@@ -148,13 +151,14 @@ kpi:
           - "bash"
           - "-c"
           - "celery -A kobo inspect ping -d kpi_main_worker@$HOSTNAME | grep -q OK"
-    resources:
-      limits:
-        cpu: 1000m
-        memory: 800Mi
-      requests:
-        cpu: 300m
-        memory: 280Mi
+    resources: {}
+    # resources:
+    #   limits:
+    #     cpu: 1000m
+    #     memory: 800Mi
+    #   requests:
+    #     cpu: 300m
+    #     memory: 280Mi
     autoscaling:
       enabled: true
       minReplicas: 2
@@ -162,13 +166,14 @@ kpi:
       targetCPU: 80
       # targetMemory: 80
   beat:
-    resources:
-      limits:
-        cpu: 800m
-        memory: 400Mi
-      requests:
-        cpu: 50m
-        memory: 200Mi
+    resources: {}
+    # resources:
+    #   limits:
+    #     cpu: 800m
+    #     memory: 400Mi
+    #   requests:
+    #     cpu: 50m
+    #     memory: 200Mi
   ingress:
     enabled: false
     className: ""
@@ -233,15 +238,16 @@ enketo:
   image:
     repository: kobotoolbox/enketo-express-extra-widgets
     pullPolicy: IfNotPresent
-    tag: "7.6.1"
+    tag: "7.5.1"
   replicaCount: 1
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 512Mi
-    requests:
-      cpu: 500m
-      memory: 256Mi
+  resources: {}
+  # resources:
+  #   limits:
+  #     cpu: 1000m
+  #     memory: 512Mi
+  #   requests:
+  #     cpu: 500m
+  #     memory: 256Mi
   autoscaling:
     enabled: false
     minReplicas: 2

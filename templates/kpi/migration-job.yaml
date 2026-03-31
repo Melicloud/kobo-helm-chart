@@ -9,7 +9,6 @@ metadata:
     "helm.sh/hook": post-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "0"
-    checksum/secret: {{ include (print $.Template.BasePath "/kpi/secrets.yaml") . | sha256sum }}
     checksum/configmap: {{ include (print $.Template.BasePath "/kpi/configmap.yaml") . | sha256sum }}
     tag: "{{ .Values.kpi.version }}"
 spec:
@@ -29,22 +28,6 @@ spec:
         env:
           - name: DJANGO_SECRET_KEY
             value: {{ required "kobotoolbox.djangoSecret is a required value." .Values.kobotoolbox.djangoSecret }}
-          {{- if .Values.postgresql.enabled }}
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ default (include "kobo.postgresql.fullname" .) .Values.postgresql.auth.existingSecret }}
-                key: postgres-password
-          - name: DATABASE_URL
-            value: {{ (include "kobo.postgresql.url" .) }}
-          - name: KC_DATABASE_URL
-            value: postgres://postgres:$(POSTGRES_PASSWORD)@{{ (include "kobo.postgresql.fullname" .) }}:5432/postgres
-          {{- else }}
-          - name: DATABASE_URL
-            value: {{ required "kpi.env.secret.DATABASE_URL is a required value." .Values.kpi.env.secret.DATABASE_URL }}
-          - name: KC_DATABASE_URL
-            value: {{ required "kobotoolbox.kobocatDatabase required" .Values.kobotoolbox.kobocatDatabase }}
-          {{- end }}
           {{ if .Values.kobotoolbox.redis }}
           - name: CACHE_URL
             value: {{ printf "%s/5%s" .Values.kobotoolbox.redis .Values.kobotoolbox.redisParameters | quote }}
